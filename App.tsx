@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { processBookingData } from './services/geminiService';
 import type { BookingRecord } from './types';
-import { OCR_TEXT_PAGE_1, OCR_TEXT_PAGE_2 } from './constants';
+import { OCR_TEXT_PAGE_1, OCR_TEXT_PAGE_2, OCR_TEXT_PAGE_3 } from './constants';
 import PaxByHotelChart from './components/PaxByHotelChart';
 import PaxByAgencyChart from './components/PaxByAgencyChart';
 import PaxUniqueByAgencyChart from './components/PaxUniqueByAgencyChart';
@@ -20,9 +20,11 @@ const App: React.FC = () => {
       setIsLoading(true);
       setError(null);
       try {
-        const combinedText = `Page 1 (22.12):\n${OCR_TEXT_PAGE_1}\n\nPage 2 (22.12):\n${OCR_TEXT_PAGE_2}`;
+        // Combinamos las tres páginas de OCR proporcionadas
+        const combinedText = `Page 1:\n${OCR_TEXT_PAGE_1}\n\nPage 2:\n${OCR_TEXT_PAGE_2}\n\nPage 3:\n${OCR_TEXT_PAGE_3}`;
         const data = await processBookingData(combinedText);
         
+        // 1. Identificar códigos cancelados (último estatus para una reserva)
         const cancelledCodes = new Set<string>();
         data.forEach(record => {
           if (record.estatus.toUpperCase() === 'CANCELLATION') {
@@ -30,8 +32,10 @@ const App: React.FC = () => {
           }
         });
 
+        // 2. Filtrar registros activos (que no han sido cancelados)
         const activeRecords = data.filter(record => !cancelledCodes.has(record.codigoReserva));
         
+        // 3. Agrupar por código de reserva para asegurar que tomamos la versión más reciente del correo
         const bookingsByCode = new Map<string, BookingRecord[]>();
         activeRecords.forEach(record => {
             const records = bookingsByCode.get(record.codigoReserva) || [];
@@ -39,6 +43,7 @@ const App: React.FC = () => {
             bookingsByCode.set(record.codigoReserva, records);
         });
 
+        // 4. Obtener la última versión de cada reserva activa basándonos en la fecha/hora del correo
         const finalRecords: BookingRecord[] = [];
         bookingsByCode.forEach(records => {
           if (records.length > 0) {

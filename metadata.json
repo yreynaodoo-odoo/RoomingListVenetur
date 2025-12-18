@@ -1,5 +1,5 @@
 {
-  "name": "Dashboard de Reservas",
+  "name": "Dashboard de Reservas Venetur",
   "description": "Un dashboard con IA para analizar y visualizar datos de reservas turísticas a partir de texto no estructurado, proporcionando información sobre pasajeros, agencias y hoteles.",
   "requestFramePermissions": []
 }
