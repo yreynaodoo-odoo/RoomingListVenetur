@@ -3,7 +3,7 @@
 import { GoogleGenAI, Type } from "@google/genai";
 import type { BookingRecord } from '../types';
 
-const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_API_KEY });
+const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_API_KEY }); 
 
 const responseSchema = {
     type: Type.ARRAY,
