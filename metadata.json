@@ -1,0 +1,5 @@
+{
+  "name": "Dashboard de Reservas",
+  "description": "Un dashboard con IA para analizar y visualizar datos de reservas turísticas a partir de texto no estructurado, proporcionando información sobre pasajeros, agencias y hoteles.",
+  "requestFramePermissions": []
+}
