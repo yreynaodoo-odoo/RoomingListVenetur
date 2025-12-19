@@ -1,5 +1,4 @@
 
-
 import { GoogleGenAI, Type } from "@google/genai";
 import type { BookingRecord } from '../types';
 
@@ -45,7 +44,7 @@ export const processBookingData = async (text: string): Promise<BookingRecord[]>
 
     Tu tarea es:
     1.  Analizar cada fila para extraer todos los detalles de la reserva disponibles para cada pasajero.
-    2.  Las columnas son: Fecha Vuelo, Fecha Hora Correo, Estatus, Codigo Reserva, Género, Nombre Completo, Fecha Nacimiento, Edad, Pasaporte, Nacionalidad, Agencia, Fecha Inicio, Fecha Fin, Noches, Hotel, Plan de Comidas, Alojamiento, Observaciones. Ten en cuenta que el encabezado de 'Fecha Nacimiento' podría estar mal escrito como 'echa Nacimient'.
+    2.  Las columnas son: Fecha Vuelo, Fecha Hora Correo, Estatus, Codigo Reserva, Género, Nombre Completo, Fecha Nacimiento, Edad, Pasaporte, Nacionalidad, Agencia, Fecha Inicio, Fecha Fin, Noches, Hotel, Plan de Comidas, Alojamiento, Observaciones.
     3.  Combinar la información en un único registro estructurado para cada pasajero.
     4.  El campo 'pasaporte' a veces es un solo número o dos números. Combínalos en una sola cadena de texto.
     5.  Presta mucha atención a la alineación de las columnas, ya que podría ser imperfecta. Usa el contexto y los nombres de los encabezados para asociar correctamente los datos con las columnas.
@@ -60,7 +59,7 @@ export const processBookingData = async (text: string): Promise<BookingRecord[]>
 
     try {
         const response = await ai.models.generateContent({
-            model: 'gemini-2.5-pro',
+            model: 'gemini-3-pro-preview',
             contents: prompt,
             config: {
                 responseMimeType: 'application/json',
@@ -75,10 +74,9 @@ export const processBookingData = async (text: string): Promise<BookingRecord[]>
             throw new Error("La respuesta de la IA no es un array.");
         }
         
-        // Basic validation
         return data.map((item: any) => ({
             ...item,
-            observaciones: item.observaciones || '' // Ensure observaciones is always a string
+            observaciones: item.observaciones || ''
         }));
 
     } catch (error) {
